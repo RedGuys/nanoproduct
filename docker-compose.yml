@@ -1,0 +1,26 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:3.6
+    container_name: mongo
+    networks:
+        - default
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    working_dir: /usr/src/app
+    container_name: api
+    ports:
+      - "3000:3000"
+    networks:
+        - default
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+    volumes:
+      - .:/usr/src/app
+
+networks:
+    default:
